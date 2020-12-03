@@ -45,7 +45,7 @@ function isValidPassword(passwordPolicy, password, searchChar, firstIndex, secon
         case 'legacyPolicy':
             let charCounter = 0;
             for (let j = 0; j < password.length; j++) {
-                if (password[j] === searchChar) {
+                if (isSameCharacter(password[j], searchChar)) {
                     charCounter++;
                 }
             }
@@ -58,14 +58,14 @@ function isValidPassword(passwordPolicy, password, searchChar, firstIndex, secon
             // not zero-indexed
             let firstChar = password[firstIndex - 1];
             let secondChar = password[secondIndex - 1];
-            if (firstChar !== undefined && firstChar === searchChar) {
-                let duplicateEntry = firstChar === secondChar;
+            if (possibleValidPassword(firstChar, searchChar)) {
+                let duplicateEntry = isSameCharacter(firstChar, secondChar);
                 if (duplicateEntry) {
                     break;
                 }
 
                 isValidPassword = true;
-            } else if (secondChar !== undefined && secondChar === searchChar) {
+            } else if (possibleValidPassword(secondChar, searchChar)) {
                 isValidPassword = true;
             }
             break;
@@ -74,6 +74,25 @@ function isValidPassword(passwordPolicy, password, searchChar, firstIndex, secon
     }
 
     return isValidPassword;
+}
+
+/**
+ * Checks if passed character is not undefined and equal to the search char.
+ * @param {string} currentChar 
+ * @param {string} searchChar 
+ * @returns {boolean}
+ */
+function possibleValidPassword(currentChar, searchChar) {
+    return currentChar !== undefined && currentChar === searchChar;
+}
+
+/**
+ * Equality check between two characters.
+ * @param {string} charA 
+ * @param {string} charB 
+ */
+function isSameCharacter(charA, charB) {
+    return charA === charB;
 }
 
 countValidPasswords(file, 'legacyPolicy');
