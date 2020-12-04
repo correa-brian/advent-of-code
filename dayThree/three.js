@@ -13,6 +13,7 @@ function findTrees(map, x, y) {
     let numTrees = 0;
     let innerIndex = 0;
 
+    let lineLength = map[0].length;
     for (let outerIndex = 0; outerIndex < map.length; outerIndex += y) {
         let currentPosition = map[outerIndex][innerIndex];
         if (currentPosition === "#") {
@@ -20,7 +21,6 @@ function findTrees(map, x, y) {
         }
 
         innerIndex += x;
-        let lineLength = map[outerIndex].length;
         let indexOutOfBounds = innerIndex >= lineLength;
         if (indexOutOfBounds) {
             // reset the index to the beginning of the array
