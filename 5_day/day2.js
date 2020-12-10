@@ -25,12 +25,7 @@ function getMissingSeatId(input) {
 }
 
 function getSeatId(line) {
-  let rowMin = 0;
-  let rowMax = 127;
-  let colMin = 0;
-  let colMax = 7;
-
-  let rowColumn = getRowColumn(line, colMin, colMax, rowMin, rowMax);
+  let rowColumn = getRowColumn(line);
   let row = rowColumn[0];
   let column = rowColumn[1];
   return row * 8 + column;
@@ -45,7 +40,11 @@ function getNewMin(min, max) {
   return Math.floor((max - min) / 2);
 }
 
-function getRowColumn(line, colMin, colMax, rowMin, rowMax) {
+function getRowColumn(line) {
+  let rowMin = 0;
+  let rowMax = 127;
+  let colMin = 0;
+  let colMax = 7;
   for (let i = 0; i < line.length; i++) {
     let char = line[i];
     if (char === "L") {
