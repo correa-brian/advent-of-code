@@ -9,18 +9,11 @@ function getMissingSeatId(input) {
 
   for (let i = 0; i < input.length; i++) {
     const line = input[i];
-    let rowMin = 0;
-    let rowMax = 127;
-    let colMin = 0;
-    let colMax = 7;
-
-    let row = getRow(line, rowMin, rowMax);
-    let col = getColumn(line, colMin, colMax);
     // calc seat id
-    let seatId = row * 8 + col;
+    let seatId = getSeatId(line);
     seatMap[seatId] = true;
   }
-
+  
   for (const seat in seatMap) {
     let seatId = Number(seat);
     if (!seatMap[seatId + 1] && seatMap[seatId + 2]) {
@@ -29,6 +22,18 @@ function getMissingSeatId(input) {
   }
 
   return seatId;
+}
+
+function getSeatId(line) {
+  let rowMin = 0;
+  let rowMax = 127;
+  let colMin = 0;
+  let colMax = 7;
+
+  let rowColumn = getRowColumn(line, colMin, colMax, rowMin, rowMax);
+  let row = rowColumn[0];
+  let column = rowColumn[1];
+  return row * 8 + column;
 }
 
 function getNewMax(min, max) {
@@ -40,31 +45,23 @@ function getNewMin(min, max) {
   return Math.floor((max - min) / 2);
 }
 
-function getColumn(line, min, max) {
-  for (let j = line.length - 3; j < line.length; j++) {
-    let char = line[j];
+function getRowColumn(line, colMin, colMax, rowMin, rowMax) {
+  for (let i = 0; i < line.length; i++) {
+    let char = line[i];
     if (char === "L") {
-      max = getNewMax(min, max);
+      colMax = getNewMax(colMin, colMax);
     } else if (char === "R") {
-      let result = Math.floor((max - min) /2);
-      min += getNewMin(min, max);
-    }
-  }
-
-  return Math.max(min, max);
-}
-
-function getRow(line, min, max) {
-  for (let j = 0; j < line.length-3; j++) {
-    let char = line[j];
-    if (char === "F") {
-      max = getNewMax(min, max);
+      let result = Math.floor((colMax - colMin) /2);
+      colMin += getNewMin(colMin, colMax);
     } else if (char === "B") {
-      min += getNewMin(min, max);
+        rowMin += getNewMin(rowMin, rowMax);
+    } else if (char === "F") {
+      rowMax = getNewMax(rowMin, rowMax);
     }
   }
-
-  return Math.max(min, max);
+  let row = Math.max(rowMin, rowMax);
+  let column = Math.max(colMin, colMax);
+  return [row, column];
 }
 
 console.log(getMissingSeatId(boardingPasses));
