@@ -13,11 +13,11 @@ function getMissingSeatId(input) {
     let seatId = getSeatId(line);
     seatMap[seatId] = true;
   }
-  
+
   for (const seat in seatMap) {
     let seatId = Number(seat);
     if (!seatMap[seatId + 1] && seatMap[seatId + 2]) {
-      return seatId + 1
+      return seatId + 1;
     }
   }
 
